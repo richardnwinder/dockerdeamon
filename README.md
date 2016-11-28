@@ -16,3 +16,6 @@ In order to edit and compile the source some dependancies are required
 
 Copy the directory DockerClient from the src directory to the same directory as your dockerdeamon executable
 
+######It is necessary to hard code the location of the web pages directory **DockerClient** in the main.go source code line 36.
+
+>const webPath string = "/home/user/DockerClient"
