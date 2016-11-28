@@ -24,3 +24,11 @@ Copy the directory DockerClient from the src directory to the same directory as 
 >const webPath string = "/home/user/DockerClient"
 
 and alter the webPath string to point to the location of your DockerClient web pages.
+
+####Running
+
+Normal execution command
+>user@machine:~**$GOPATH/bin/dockerdeamon -admin=[admin-name] -password=[pwd]**
+
+replace [admin-name] with char string eg - richard - any length of string is accepted but whitespace is not
+replace [pwd] with any char string eg - win36qly - any length of string is accepted but whitespace is not
