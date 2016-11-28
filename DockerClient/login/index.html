@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  
+  <title>DockerOS2</title>
+  <link href="./css/dialog.css" rel="stylesheet" type="text/css">
+  <link href="./css/flags.css" rel="stylesheet" type="text/css">
+  <script src="./js/country.js"></script>
+  <script src="./js/cookie.js"></script>
+  <script src="./js/dialog.js"></script>
+  <script src="./js/translator.js"></script>
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  
+  
+  <style>
+	div#frame{
+		width:900px;
+		margin:0px auto 0px auto;
+		padding:5px;
+		border:2px solid purple;
+		background-color:#f5f0f0;
+	}
+  </style>
+</head>
+<body style="overflow: auto; background-color: rgb(245, 240, 240);" onload="openSettings()" onunload="saveSettings()">
+<div id="frame" style="position: relative;">
+	<div id="logo" style="margin: 0px 20px; float: left; color: rgb(51, 51, 255);">
+		<h1>Docker Client</h1>
+	</div>
+	<div id="index" style="margin: 0px 100px; float: right; color: rgb(51, 51, 255);">
+		<h1>Login Screen</h1>
+	</div>
+	<hr style="border-color: blue; border-width: 4px; margin: 20px; clear: both;">
+	<div id="main" style="overflow: auto;">
+		
+	</div>
+	<hr style="border-color: blue; border-width: 2px; margin: 20px 20px 0px;">
+</div>
+
+</body>
+<script>
+var host = "https://127.0.0.1:8081";
+var currentLanguage = ""
+function openSettings()
+{
+	console.log("openSettings().....................");
+	console.log("hosting server.... " + self.location.host);
+	host = "https://" + self.location.host;
+	currentCountry = getCookie("return-country");
+	currentLanguage = getCookie("return-language");
+	console.log("getCookie(return-country) = " + currentCountry);
+	console.log("getCookie(return-language) = " + currentLanguage);
+	if(currentCountry == null) currenrCountry = "";
+	if(currentLanguage == null) currenrLanguage = "";
+	if(currentCountry == "")
+	{
+		$.get("https://ipinfo.io", function(response) {
+			console.log(response.ip, response.country);
+			currentCountry = country(response.country);
+			currentLanguage = language(response.country);
+			setCookie("return-country", currentCountry, 365, "/");
+			setCookie("return-language", currentLanguage, 365, "/");
+			/*switch(response.country)
+			{
+				case "FR": currentCountry = "France"; currentLanguage = "fr"; break;
+				case "GB": currentCountry = "UK"; currentLanguage = "en"; break;
+				default: currentCountry = "UK"
+			}*/
+			$("#passwordlog").keypress(function(e)
+			{
+				if(e.which == 13) formLogin_submit();
+			});
+		}, "jsonp");
+	}
+	else
+	{
+		$("#passwordlog").keypress(function(e)
+		{
+			if(e.which == 13) formLogin_submit();
+		});
+	}
+	
+	createLoginDialog();
+}
+function saveSettings()
+{
+}
+function refreshView()
+{
+	//showWait();
+	//var request = host + "/getData?cmd=images";
+	//console.log("Sending request: " + request);
+	//$.get(request, {}, function(data)
+	//{
+		//console.log(data);
+		//document.getElementById('main').style.display = "block";
+		//$('#main').html(data);
+	//});
+}
+function showWait()
+{
+	$('#main').html("<div style=\"left:0px; top:0px; width:100%; height:200px; z-index 999; background:url(../images/wait.gif) center no-repeat rgb(245, 240, 240);\"></div>");
+}
+function hideWait()
+{
+	$('#main').html("");
+}
+
+function createLoginDialog()
+{
+	var cl = currentLanguage;
+	var data;
+
+	data = "<div id=\"clientInfo\" style=\"width: 400px; float:left;\">" +
+					"<div style=\"display: inline-block; width: 360px;\">" +
+					"<img src=\"images/docker.png\" alt=\"docker\" style=\"width:128px;height:128px;border:0;margin:5px 5px 0px 20px;float: left;\">" +
+					"<br><h4>Inspect the Docker Deamon</h4>" +
+					"</div>" +
+					"<div style=\"display: inline-block; width: 360px;\">" +
+					"<img src=\"images/container.png\" alt=\"container\" style=\"width:128px;height:128px;border:0;margin:5px 5px 0px 20px;float: left;\">" +
+					"<br><h4>Manage the Docker Containers</h4>" +
+					"</div>" +
+					"<div style=\"display: inline-block; width: 360px;\">" +
+					"<img src=\"images/image.png\" alt=\"image\" style=\"width:128px;height:128px;border:0;margin:5px 5px 0px 20px;float: left;\">" +
+					"<br><h4>Manage the Docker Images</h4>" +
+					"</div>" +
+			 "</div>" +
+	
+		"<form class=\"css-form\" style=\"width: 360px;\" action=\"#\" id=\"formLogin\" method=\"post\" name=\"Login\">" +
+			//"<a class=\"css-form-close\" href=\"#\" id=\"close\" onclick=\"dialog_hide('divLogin')\">X</a>" +
+			"<h1 class=\"css-form\">" + tr("Hello", cl) + "</h1>" +
+			"<p class=\"css-form\">" + tr("Please Login to your account", cl) + "</p>" +
+			"<hr class=\"css-form\">" +
+			"<label class=\"css-form\">" + tr("Username", cl) + "</label>" +
+			"<input class=\"css-form\" id=\"usernamelog\" name=\"usernamelog\" placeholder=\"Username\" type=\"text\"></input>" +
+			"<label class=\"css-form\">" + tr("Password", cl) + "</label>" +
+			"<input class=\"css-form\" id=\"passwordlog\" name=\"passwordlog\" placeholder=\"Password\" type=\"text\"></input>" +
+			<!--<textarea id=\"msg\" name=\"message\" placeholder=\"Message\"></textarea>-->
+			"<br>" +
+			"<input class=\"css-form\" id=\"rememberMe\" name=\"rememberMe\" type=\"checkbox\"></input>" +
+			"<label for=\"rememberMe\" style=\"color:#00f; font-size:13px\">" + tr("Remember Me", cl) + "</label>" +
+			"<a class=\"css-form\" id=\"submitLogin\" href=\"#\" onclick=\"formLogin_submit()\">" + tr("Login", cl) + "</a>" +
+			"<hr class=\"css-form\">" +
+			"<a class=\"css-form-text\" id=\"forgotPassword\" href=\"#\" onclick=\"forgotPassword_submit()\">" + tr("Forgot Your Password?", cl) + "</a>" +
+			"<a class=\"css-form-text\" id=\"createAccount\" href=\"#\" onclick=\"createAccount_submit()\">" + tr("Create An Account", cl) + "</a>" +
+		"</form>"; // +
+	//"</div>";
+	$('#main').html(data);
+}
+</script>
+</html>

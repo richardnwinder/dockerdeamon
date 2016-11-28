@@ -1,0 +1,85 @@
+/*----------------------------------------------
+CSS settings for HTML div Exact Center
+------------------------------------------------*/
+
+form.css-form{
+padding:10px 50px;
+font-family:arial;
+background-color: rgb(245, 240, 240);
+float: right;
+}
+h2.css-form{
+background-color:#FEFFED;
+padding:20px 35px;
+margin:-10px -50px;
+text-align:left;
+border-radius:10px 10px 0 0;
+}
+hr.css-form {
+margin-top: 10px;
+margin-bottom: 20px;
+margin-left: -50px;
+margin-right: -50px;
+border:0;
+border-top:1px solid #ccc
+}
+hr.css-form-block{
+margin:10px 0px;
+border:0;
+border-top:1px solid #ccc
+}
+label.css-form{
+display:block;
+clear:both;
+font-size:12px;
+font-family:arial;
+font-weight: bold;
+}
+input.css-form[type=text] {
+padding:3px;
+margin-top:5px;
+margin-bottom:20px;
+border:1px solid #ccc;
+padding-left:10px;
+font-size:12px;
+font-family:arial;
+}
+input.css-form[type=checkbox]{
+padding:5px;
+margin-top:5px;
+margin-bottom:20px;
+padding-left:10px;
+}
+p.css-form{
+font-size:12px;
+font-family:arial;
+}
+hr.css-form-block{
+margin:20px 0px;
+border:0;
+border-top:1px solid #ccc
+}
+a.css-form{
+display:inline-block;
+width:80px;
+text-decoration:none;
+text-align:center;
+background-color:#FFBC00;
+color:#fff;
+border:1px solid #FFCB00;
+padding:10px;
+margin-top:10px;
+margin-bottom:10px;
+margin-left:30px;
+margin-right:10px;
+font-size:14px;
+cursor:pointer;
+border-radius:5px;
+}
+a.css-form-text{
+color:#00f;
+font-size:11px;
+margin-left:10px;
+margin-right:10px;
+}
+

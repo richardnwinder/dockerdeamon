@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Docker Deamon</title>
+  <script src="./js/cookie.js"></script>
+  <script src="./js/dialog.js"></script>
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  
+  
+  <style>
+	div#frame{
+		width:900px;
+		margin:0px auto 0px auto;
+		padding:5px;
+		background-color:#f5f0f0;
+	}
+  </style>
+</head>
+<body style="background-color: rgb(245, 240, 240);" onload="openSettings()" onunload="saveSettings()">
+<div id="frame" style="width: 98%; margin: 0px;">
+	<div id="logo" style="margin: 0px 20px; float: left; color: rgb(51, 51, 255);">
+		<h1>Docker Deamon</h1>
+	</div>
+	<div id="index" style="margin: 0px 100px; float: right; color: rgb(51, 51, 255);">
+		<h1>Containers</h1>
+	</div>
+	<hr style="border-color: blue; border-width: 3px; margin: 20px 20px 50px; clear: both;">
+	<div id="main" style="overflow: auto; height: 360px; max-height: 400px; color: rgb(51, 51, 255)">
+		
+	</div>
+	<hr style="border-color: blue; border-width: 2px; margin: 20px 20px 0px;">
+	<div id="nav" style="display: block; margin: 0px 10px; color: rgb(51, 51, 255);">
+		<div style="float: right; margin: 20px 0px 0px 0px;">
+			<a href="#" onclick="formLogout_submit(); return false;">Logout</a>
+		</div>
+		<div style="float: right">
+			<a href="#" onclick="formLogout_submit(); return false;" style="width: 40px;">
+			<img src="images/package.png" alt="packages" align="middle" style="width:60px;height:60px;border:0;margin:0px 5px 0px 20px;"></a>
+		</div>
+		
+		<div style="float: left">
+			<a href="docker.html">
+			<img src="images/docker.png" alt="docker" align="middle" style="width:50px;height:50px;border:0;margin:5px 5px 0px 20px;"></a>
+		</div>
+		<div style="float: left; margin: 20px 0px 0px 0px;">
+			<a href="docker.html">Docker</a>
+		</div>
+		<div style="float: left">
+			<a href="containers.html" style="pointer-events: none;">
+			<img src="images/container.png" alt="container" align="middle" style="width:50px;height:50px;border:0;margin:5px 5px 0px 20px;"></a>
+		</div>
+		<div style="float: left; margin: 20px 0px 0px 0px;">
+			<a href="containers.html" style="pointer-events: none;">Containers</a>
+		</div>
+		<div style="float: left">
+			<a href="images.html">
+			<img src="images/image.png" alt="image" align="middle" style="width:50px;height:50px;border:0;margin:5px 5px 0px 20px;"></a>
+		</div>
+		<div style="float: left; margin: 20px 0px 0px 0px;">
+			<a href="images.html">Images</a>
+		</div>
+		<br style="margin: 0px; clear: both;">
+	</div>
+</div>
+
+</body>
+<script>
+var host = "";
+var currentLanguage;
+var timer;
+var waiting = false;
+
+function openSettings()
+{
+	console.log("openSettings().....................");
+	host = "https://" + self.location.host;
+	currentLanguage = getCookie("return-language");
+	showWait();
+	createView();
+	timer = setInterval(refreshView, 5000);
+}
+function saveSettings()
+{
+}
+function startContainer(name)
+{
+	console.log("startContainer(" + name + ").....................");
+	waiting = true;
+	statusID = name + ".status";
+	stopID = name + ".stop";
+	startID = name + ".start";
+	removeID = name + ".remove";
+	waitID = name + ".wait";
+
+	document.getElementById(statusID).innerHTML = "Starting";
+	document.getElementById(removeID).style.display = "none";
+	document.getElementById(startID).style.display = "none";
+	document.getElementById(waitID).style.display = "block";
+	
+	var request = host + "/getData?cmd=docker&params=start " + name;
+		console.log("Sending request: " + request);
+		$.get(request, {}, function(data)
+		{
+			console.log("return name = " + data);
+			var response = data.substring(1, data.length - 1)
+			if(response == name)
+			{
+				document.getElementById(statusID).innerHTML = "Started";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(stopID).style.display = "block";
+				document.getElementById(removeID).style.display = "none";
+			}
+			else
+			{
+				document.getElementById(statusID).innerHTML = "Fault";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(startID).style.display = "block";
+				document.getElementById(removeID).style.display = "block";
+			}
+			waiting = false;
+		});
+}
+
+function stopContainer(name)
+{
+	console.log("stopContainer(" + name + ").....................");
+	waiting = true;
+	statusID = name + ".status";
+	stopID = name + ".stop";
+	startID = name + ".start";
+	removeID = name + ".remove";
+	waitID = name + ".wait";
+
+	document.getElementById(statusID).innerHTML = "Stopping";
+	document.getElementById(stopID).style.display = "none";
+	document.getElementById(waitID).style.display = "block";
+	var request = host + "/getData?cmd=docker&params=stop " + name;
+		console.log("Sending request: " + request);
+		$.get(request, {}, function(data)
+		{
+			console.log("return name = " + data);
+			var response = data.substring(1, data.length - 1)
+			if(response == name)
+			{
+				document.getElementById(statusID).innerHTML = "Stopped";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(startID).style.display = "block";
+				document.getElementById(removeID).style.display = "block";
+			}
+			else
+			{
+				document.getElementById(statusID).innerHTML = "Fault";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(stopID).style.display = "block";
+			}
+			waiting = false;
+		})
+		.error(function(xhr, status, error) {
+			console.log("xhr: " + xhr.status);
+			console.log("status: " + status);
+			console.log("error: " + error);
+			//if(xhr.responseText == undefined)
+				//alert("ERROR " + xhr.responseText);
+			waiting = false;
+		});
+}
+
+function removeContainer(name)
+{
+	console.log("removeContainer(" + name + ").....................");
+	waiting = true;
+	statusID = name + ".status";
+	stopID = name + ".stop";
+	startID = name + ".start";
+	removeID = name + ".remove";
+	waitID = name + ".wait";
+
+	document.getElementById(statusID).innerHTML = "Removing";
+	document.getElementById(startID).style.display = "none";
+	document.getElementById(removeID).style.display = "none";
+	document.getElementById(waitID).style.display = "block";
+	var request = host + "/getData?cmd=docker&params=rm " + name;
+		console.log("Sending request: " + request);
+		$.get(request, {}, function(data)
+		{
+			console.log("return name = " + data);
+			var response = data.substring(1, data.length - 1)
+			if(response == name)
+				refreshView();
+			else
+			{
+				document.getElementById(statusID).innerHTML = "Fault";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(startID).style.display = "block";
+				document.getElementById(removeID).style.display = "block";
+			}
+			waiting = false;
+		});
+}
+function createView()
+{
+	console.log("refreshView().....................");
+	var request = host + "/getData?cmd=html&params=containers ps -a";
+	$.get(request, {}, function(data)
+	{
+		//console.log(data);
+		$('#main').html(data);
+		waiting =- false;
+	});
+}
+function refreshView()
+{
+	console.log("refreshView().....................");
+	if(!waiting)
+	{
+		var request = host + "/getData?cmd=html&params=containers ps -a";
+		$.get(request, {}, function(data)
+		{
+			//console.log(data);
+			$('#main').html(data);
+		});
+	}
+}
+function showInspect(id)
+{
+	console.log("showInspect().....................");
+	var request = host + "/getData?cmd=html&params=inspect " + id;
+		//console.log("Sending request: " + request);
+		showWait();
+		$.get(request, {}, function(data)
+		{
+			console.log(data);
+			//document.getElementById('main').style.display = "block";
+			//hideWait();
+			$('#main').html(data);
+		});
+	
+	
+	$('#main').html("<div style=\"left:0px; top:0px; width:100%; height:200px;\">Info" + id + "</div>");
+}
+function showWait()
+{
+	waiting = true;
+	$('#main').html("<div style=\"left:0px; top:0px; width:100%; height:200px; z-index 999; background:url(../images/wait.gif) center no-repeat rgb(245, 240, 240);\"></div>");
+}
+function hideWait()
+{
+	waiting = false;
+}
+
+</script>
+</html>

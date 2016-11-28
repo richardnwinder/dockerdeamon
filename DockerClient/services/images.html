@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Docker Deamon</title>
+  <link href="./css/dialog.css" rel="stylesheet" type="text/css">
+  <script src="./js/cookie.js"></script>
+  <script src="./js/dialog.js"></script>
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/translator.js"></script>
+  <script src="./js/socket.io.js"></script>
+  
+  
+  <style>
+	div#frame{
+		width:900px;
+		margin:0px auto 0px auto;
+		padding:5px;
+		background-color:#f5f0f0;
+	}
+	div.term{
+		font-size: 10px;
+		overflow: auto;
+		height: 100px;
+		margin: 10px 0px;
+		background-color: black;
+		color: white;
+		border: solid 4px blue;
+	}
+	
+  </style>
+</head>
+<body style="background-color: rgb(245, 240, 240);" onload="openSettings()" onunload="saveSettings()">
+<div id="frame" style="width: 98%; margin: 0px;">
+	<!-- Create New Dialog Shell -->
+	<div class="css-modal-dialog" id="divDialog">
+	</div>
+	<!-- Create Header -->
+	<div id="logo" style="margin: 0px 20px; float: left; color: rgb(51, 51, 255);">
+		<h1>Docker Deamon</h1>
+	</div>
+	<div id="index" style="margin: 0px 100px; float: right; color: rgb(51, 51, 255);">
+		<h1>Local Images</h1>
+	</div>
+	<hr style="border-color: blue; border-width: 3px; margin: 20px 20px 10px; clear: both;">
+	<!-- Create MenuBar for Images-->
+	<div id="image-menu" style="margin: 0px 10px 10px 0px; color: rgb(51, 51, 255);">
+		<div style="float: left">
+			<a href="#" style="width: 40px;" onclick="showDockerHub()">
+			<img src="../images/docker-image.png" alt="packages" align="middle" style="width:40px;height:32px;border:0;margin:0px 5px 20px 20px;"></a>
+		</div>
+		<div style="float: left; margin: 4px 20px 0px 0px;">
+			<a href="#" onclick="showDockerHub()">Image Search</a>
+		</div>
+		<div style="float: right; margin: 4px 20px 0px 0px;">
+			<a href="#" onclick="showImagePullDialog()">Pull Image</a>
+		</div>
+		<div style="float: right">
+			<a href="#" style="width: 40px;" onclick="showImagePullDialog()">
+			<img src="../images/pull-image.png" alt="packages" align="middle" style="width:40px;height:32px;border:0;margin:0px 5px 20px 20px;"></a>
+		</div>
+		<div style="float: right; margin: 4px 20px 0px 0px;">
+			<a href="#" onclick="buildImage()">Build Image</a>
+		</div>
+		<div style="float: right">
+			<a href="#" style="width: 40px;" onclick="buildImage()">
+			<img src="../images/pull-image2.png" alt="packages" align="middle" style="width:40px;height:32px;border:0;margin:0px 5px 20px 20px;"></a>
+		</div>
+	</div>
+	<!-- Create main content -->
+	<div id="main" style="overflow: auto; height: 360px; max-height: 400px; color: rgb(51, 51, 255); clear: both;">
+
+	</div>
+	
+	<hr style="border-color: blue; border-width: 2px; margin: 10px 20px 0px;">
+	<!-- Create Common NavBar -->
+	<div id="nav" style="display: block; margin: 0px 10px; color: rgb(51, 51, 255);">
+		<div style="float: right; margin: 20px 0px 0px 0px;">
+			<a href="#" onclick="formLogout_submit(); return false;">Logout</a>
+		</div>
+		<div style="float: right">
+			<a href="#" onclick="formLogout_submit(); return false;" style="width: 40px;">
+			<img src="images/package.png" alt="packages" align="middle" style="width:60px;height:60px;border:0;margin:0px 5px 0px 20px;"></a>
+		</div>
+		<div style="float: left">
+			<a href="docker.html">
+			<img src="images/docker.png" alt="docker" align="middle" style="width:50px;height:50px;border:0;margin:5px 5px 0px 20px;"></a>
+		</div>
+		<div style="float: left; margin: 20px 0px 0px 0px;">
+			<a href="docker.html">Docker</a>
+		</div>
+		<div style="float: left">
+			<a href="containers.html">
+			<img src="images/container.png" alt="container" align="middle" style="width:50px;height:50px;border:0;margin:5px 5px 0px 20px;"></a>
+		</div>
+		<div style="float: left; margin: 20px 0px 0px 0px;">
+			<a href="containers.html">Containers</a>
+		</div>
+		<div style="float: left">
+			<a href="images.html" style="pointer-events: none;">
+			<img src="images/image.png" alt="image" align="middle" style="width:50px;height:50px;border:0;margin:5px 5px 0px 20px;"></a>
+		</div>
+		<div style="float: left; margin: 20px 0px 0px 0px;">
+			<a href="images.html" style="pointer-events: none;">Images</a>
+		</div>
+		<br style="margin: 0px; clear: both;">
+	</div>
+</div>
+
+</body>
+<script>
+var host = "";
+var socket;
+var currentLanguage;
+var timer;
+var waiting = false;
+
+//document.getElementById('popupButton').addEventListener('click', dockerContainer);
+function connectLiveIO()
+{
+	var html;
+	socket = io(host)
+	socket.on("pullmsg", function(data)
+	{
+		console.log("PullMsg: " + data);
+		html = "<pre style=\"margin: 5px 5px 0px 0px; padding: 0px;\">" + data + "</pre>";
+		document.getElementById('pull-term').innerHTML += html;
+		document.getElementById('pull-term').scrollTop = document.getElementById('pull-term').scrollHeight;
+	})
+	socket.on("pushmsg", function(data)
+	{
+		console.log("PushMsg: " + data);
+		html = "<pre>" + data + "</pre>";
+		document.getElementById('push-term').innerHTML += html;
+	})
+}
+function openSettings()
+{
+	console.log("openSettings().....................");
+	host = "https://" + self.location.host;
+	connectLiveIO();
+	currentLanguage = getCookie("return-language");
+	showWait('#main');
+	createView();
+	//timer = setInterval(refreshView, 10000);
+}
+function saveSettings()
+{
+}
+function pullImage()
+{
+	console.log("pullImage().....................");
+	document.getElementById('pull.wait').style.display = "block";
+	document.getElementById('pull-repo').style.display = "none";
+	var repo = document.getElementById('pull-repository').value;
+	var request = host + "/getData?cmd=html&params=pull " + repo;
+		console.log("Sending request: " + request);
+		//document.getElementById('pull-term').innerHTML = "<h6>Sending request " + request + "</h6>";
+		$.get(request, {}, function(data)
+		{
+			console.log("return data = " + data);
+			response = data.substring(1, data.length - 1)
+			document.getElementById('pull.wait').style.display = "none";
+			document.getElementById('pull-repo').style.display = "block";
+			//$('#pull-term').html(data);
+			//if(response.substring(0,8) == "Untagged")
+			refreshView();
+			/*else
+			{
+				document.getElementById(statusID).innerHTML = "Fault";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(removeID).style.display = "block";
+			}*/
+			waiting = false;
+			
+		});
+}
+function pushImage()
+{
+	console.log("pushImage().....................");
+	document.getElementById('push.wait').style.display = "block";
+	document.getElementById('push-repo').style.display = "none";
+	var repo = document.getElementById('push-repository').value;
+	var request = host + "/getData?cmd=html&params=push " + repo;
+		console.log("Sending request: " + request);
+		$.get(request, {}, function(data)
+		{
+			console.log("return data = " + data);
+			response = data.substring(1, data.length - 1)
+			document.getElementById('push.wait').style.display = "none";
+			document.getElementById('push-repo').style.display = "block";
+			//$('#push-term').html(data);
+			//if(response.substring(0,8) == "Untagged")
+			refreshView();
+			/*else
+			{
+				document.getElementById(statusID).innerHTML = "Fault";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(removeID).style.display = "block";
+			}*/
+			waiting = false;
+			
+		});
+}
+function removeImage(name)
+{
+	console.log("removeImage(" + imageId + ").....................");
+	waiting = true;
+	statusID = imageId + ".status";
+	removeID = imageId + ".remove";
+	waitID = imageId + ".wait";
+
+	document.getElementById(statusID).innerHTML = "Removing";
+	document.getElementById(removeID).style.display = "none";
+	document.getElementById(waitID).style.display = "block";
+	var request = host + "/getData?cmd=docker&params=rmi " + imageId;
+		console.log("Sending request: " + request);
+		$.get(request, {}, function(data)
+		{
+			console.log("return name = " + data);
+			response = data.substring(1, data.length - 1)
+			if(response.substring(0,8) == "Untagged")
+				refreshView();
+			else
+			{
+				document.getElementById(statusID).innerHTML = "Fault";
+				document.getElementById(waitID).style.display = "none";
+				document.getElementById(removeID).style.display = "block";
+			}
+			waiting = false;	
+		});
+}
+function createView()
+{
+	console.log("createView().....................");
+	var request = host + "/getData?cmd=html&params=images";
+	$.get(request, {}, function(data)
+	{
+		//console.log(data);
+		$('#main').html(data);
+		waiting = false;
+	});
+}
+function refreshView()
+{
+	console.log("refreshView().....................");
+	if(!waiting)
+	{host = "https://" + self.location.host;
+		var request = host + "/getData?cmd=html&params=images";
+		$.get(request, {}, function(data)
+		{
+			//console.log(data);
+			$('#main').html(data);
+		});
+	}
+}
+function showInfo(name)
+{
+	console.log("showInfo().....................");
+	var request = host + "/getData?cmd=html&params=ps -a";
+		//console.log("Sending request: " + request);
+		//showWait();
+		//$.get(request, {}, function(data)
+		//{
+			//console.log(data);
+			//document.getElementById('main').style.display = "block";
+			//hideWait();
+			//$('#main').html(data);
+		//});
+	
+	
+	$('#main').html("<div style=\"left:0px; top:0px; width:100%; height:200px;\">Info" + name + "</div>");
+}
+function showWait(div)
+{
+	waiting = true;
+	$(div).html("<div style=\"left:0px; top:0px; width:100%; height:200px; z-index 999; background:url(../images/wait.gif) center no-repeat rgb(245, 240, 240);\"></div>");
+}
+function hideWait()
+{
+	$('#main').html("");
+}
+function popupCenter(imageId, title, prompt, w, h)
+{
+    // Fixes dual-screen position                         Most browsers      Firefox
+    var dualScreenLeft = 0; //window.screenLeft != undefined ? window.screenLeft : screen.left;
+    var dualScreenTop = 0; //window.screenTop != undefined ? window.screenTop : screen.top;
+
+    var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+    var top = ((height / 2) - (h / 2)) + dualScreenTop;
+    
+    var wizardSetup = {};
+    wizardSetup.title = title;
+    wizardSetup.prompt = prompt;
+    wizardSetup.name = "";
+    
+	/*if(window.showModalDialog)
+	{
+		var wizard = {};
+		wizard.left = "dialogLeft:" + left.toString() + "px; ";
+		wizard.top = "dialogTop:" + top.toString() + "px; ";
+		wizard.height = "dialogHeight:" + h.toString() + "px; ";
+		wizard.width = "dialogWidth:" + w.toString() + "px; ";
+		var retConfig = showModalDialog("containerWizard.html", wizardSetup, wizard.width + wizard.height + wizard.left + wizard.top);
+		if(retConfig)
+			wizardSetup = retConfig
+	}
+	else
+	{
+		var wizard = {}
+		wizard.left = "left=" + left.toString() + ",";
+		wizard.top = "top=" + top.toString() + ",";
+		wizard.height = "height=" + h.toString() + ",";
+		wizard.width = "width=" + w.toString() + ",";
+		wizard.params = "modal=yes,alwaysRaised=yes";
+		var modal = window.open("containerWizard.html", null, wizard.width + wizard.height + wizard.left + wizard.top + wizard.params, null);
+		modal.dialogArguments = wizardSetup;
+	}
+	return wizardSetup; */ 
+}
+function createContainer()
+{
+	var request;
+	//alert("createContainer activated");
+	var imageId = document.getElementById('container-imagesrc').innerText
+	var params = document.getElementById('container-params').value;
+
+	request = host + "/getData?cmd=docker&params=create " + params + imageId;
+	
+	console.log("Sending request: " + request);
+	$.get(request, {}, function(data)
+	{
+		console.log("return containerId = " + data);
+		response = data.substring(1, data.length - 1)
+		if(response == "")
+			alert("ERROR: Container not created!");
+		else
+		{
+			alert("SUCCESS: New container created.\n" + data);
+			document.getElementById('divDialog').style.display = 'none';
+		}
+
+	});
+}
+
+function showContainerDialog(imageSrc)
+{
+	var cl = currentLanguage;
+	var data;
+
+	data = "<div class =\"css-modal-form\" id=\"dialogCreateContainer\" style=\"width: 400px;\">" +
+		"<form class=\"css-form\" action=\"#\" id=\"formCreateContainer\" method=\"post\" name=\"CreateContainer\">" +
+			"<a class=\"css-form-close\" href=\"#\" id=\"close\" onclick=\"dialog_hide('divDialog')\">X</a>" +
+			"<h2 class=\"css-form\">" + tr("Create Container", cl) + "</h2>" +
+			"<p class=\"css-form\">" + tr("Enter a name for your container", cl) + "<br><small>" + tr("Otherwise a default name will be created.", cl) + "</small></p>" +
+			"<hr class=\"css-form\">" +
+			"<label class=\"css-form\" id=\"container-imagesrc\" style=\"display: none;\">" + imageSrc + "</label>" +
+			"<label class=\"css-form\">" + tr("Container Name", cl) + "</label>" +
+			"<input class=\"css-form\" id=\"container-name\" name=\"name\" type=\"text\" onchange=\"appendParam('--name');\"></input>" +
+			"<div style=\"clear: both; min-height: 20px;\">" +
+				"<a class=\"css-box-button\" id=\"incl-terminal\" href=\"#\" onclick=\"appendParam('-t\');\">-t</a>" +
+				"<a class=\"css-box-button\" id=\"incl-interactive\" href=\"#\" onclick=\"appendParam('-i');\">-i</a>" +
+			"</div>" +
+			
+			<!--<textarea id=\"msg\" name=\"message\" placeholder=\"Message\"></textarea>-->
+			
+			"<div style=\"clear: both; min-height: 30px;\">" +
+				"<a class=\"css-form-button\" id=\"submitParams\" href=\"#\" onclick=\"createContainer();\">" + tr("Create", cl) + "</a>" +
+			"</div>" +
+			"<label class=\"css-form\">" + tr("Parameters", cl) + "</label>" +
+			"<input class=\"css-form-status\" id=\"container-params\" name=\"parameters\" type=\"text\"></input>" +
+			"<div style=\"clear: both;\">" +
+				"<hr class=\"css-form-block\">" +
+			"</div>" +
+		"</form>" +
+	"</div>";
+	$('#divDialog').html(data);
+	document.getElementById('divDialog').style.display = "block";
+}
+function showDockerHub()
+{
+	window.open("https://hub.docker.com/explore/", "Docker Hub", "toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600");
+}
+function showImagePullDialog()
+{
+	var cl = currentLanguage;
+	var data;
+
+	data = "<div class =\"css-modal-form\" id=\"dialogImageLoad\" style=\"width: 400px;\">" +
+			
+		"<form class=\"css-form\" action=\"#\" id=\"formImagePull\" method=\"post\" name=\"ImagePull\">" +
+			"<a class=\"css-form-close\" href=\"#\" id=\"close\" onclick=\"dialog_hide('divDialog')\">X</a>" +
+			"<h2 class=\"css-form\">" + tr("Pull Image", cl) + "</h2>" +
+			"<p class=\"css-form\">" + tr("Enter a path to the repository for the image", cl) + "<br><small>" + tr("Otherwise use the search option..", cl) + "</small></p>" +
+			"<hr class=\"css-form\">" +
+			"<label class=\"css-form\">" + tr("Repository", cl) + "</label>" +
+			"<input class=\"css-form\" id=\"pull-repository\" name=\"repository\" type=\"text\" onchange=\"inRepository();\"></input>" +
+			"<div style=\"float: right; style=\"min-height: 30px;\">" +
+				"<a class=\"css-box-button\" id=\"pull-search-repository\" href=\"#\" onclick=\"searchRepository();\">Repositories</a>" +
+			"</div>" +
+			"<div id=\"image-pull-submit\" style=\"clear: both; min-height: 30px;\">" +
+				"<img class=\"css-form-wait\" id=\"pull.wait\" src=\"../images/wait2.gif\" alt=\"wait\" style=\"display: none; height: 30px;\">" +
+				"<a class=\"css-form-button\" id=\"pull-repo\" href=\"#\" onclick=\"pullImage();\">" + tr("Pull", cl) + "</a>" +
+			"</div><br>" +
+			"<div class=\"term\" id=\"pull-term\" name=\"pull-image-term\"\">" +
+			"</div>" +
+
+			"<div style=\"clear: both;\">" +
+				"<hr class=\"css-form-block\">" +
+			"</div>" +
+		"</form>" +
+	"</div>";
+	$('#divDialog').html(data);
+	document.getElementById('divDialog').style.display = "block";
+}
+
+function showImagePushDialog(repo)
+{
+	var cl = currentLanguage;
+	var data;
+
+	data = "<div class =\"css-modal-form\" id=\"dialogImagePush\" style=\"width: 400px;\">" +
+			
+		"<form class=\"css-form\" action=\"#\" id=\"formImagePush\" method=\"post\" name=\"ImagePush\">" +
+			"<a class=\"css-form-close\" href=\"#\" id=\"close\" onclick=\"dialog_hide('divDialog')\">X</a>" +
+			"<h2 class=\"css-form\">" + tr("Push Image", cl) + "</h2>" +
+			"<p class=\"css-form\">" + tr("Enter a path to the repository", cl) + "<br><small>" + tr("The selected image is displayed..", cl) + "</small></p>" +
+			"<hr class=\"css-form\">" +
+			"<label class=\"css-form\">" + tr("Repository", cl) + "</label>" +
+			"<input class=\"css-form\" id=\"push-repository\" name=\"repository\" type=\"text\" onchange=\"inRepository();\" value = " + repo + "></input>" +
+			"<div style=\"float: right; style=\"min-height: 30px;\">" +
+				"<a class=\"css-box-button\" id=\"search-repository\" href=\"#\" onclick=\"searchRepository();\">Repositories</a>" +
+			"</div>" +
+			"<div id=\"image-push-submit\" style=\"clear: both; min-height: 30px;\">" +
+				"<img class=\"css-form-wait\" id=\"push.wait\" src=\"../images/wait2.gif\" alt=\"wait\" style=\"display: none; height: 30px;\">" +
+				"<a class=\"css-form-button\" id=\"push-repo\" href=\"#\" onclick=\"pushImage();\">" + tr("Push", cl) + "</a>" +
+			"</div><br>" +
+			"<div class=\"term\" id=\"push-term\" name=\"push-image-term\"\"></div>" +
+			"</div>" +
+
+			"<div style=\"clear: both;\">" +
+				"<hr class=\"css-form-block\">" +
+			"</div>" +
+		"</form>" +
+	"</div>";
+	$('#divDialog').html(data);
+	document.getElementById('divDialog').style.display = "block";
+}
+
+function inRepository()
+{
+}
+
+function appendParam(param)
+{
+	var params = document.getElementById('container-params');
+	var value = params.value;
+	console.log("params = " + params.value);
+	switch(param)
+	{
+		case "-t":
+			if(value.indexOf("-t ") == -1)
+				params.value = ("-t " + params.value);
+			break;
+		case "-i":
+			if(value.indexOf("-i ") == -1)
+				params.value = ("-i " + value);
+			break;
+		case "--name":
+			var newName = document.getElementById('container-name').value;
+			console.log("newName = '" + newName + "'");
+			// find name in params
+			if(value.indexOf("--name ") == -1)
+				params.value = "--name " + newName + " ";
+			else
+			{
+				var startParams = value.slice(0, value.indexOf("--name") + 7);
+				console.log("startParams = '" + startParams + "'");
+				var nameParams = value.slice(value.indexOf("--name") + 7);
+				console.log("nameParams = '" + nameParams + "'");
+				var endParams = nameParams.slice(nameParams.indexOf(" "));
+				console.log("endParams = '" + endParams + "'");
+				params.value = startParams + newName + endParams;
+			}
+			break;
+		default:
+			;// no param of this value
+	}
+}
+</script>
+</html>

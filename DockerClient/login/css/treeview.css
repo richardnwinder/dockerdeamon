@@ -1,0 +1,15 @@
+/*span li {position: relative; left: -20px;}*/
+ul.LinkedList {
+	display: block;
+	margin-left: -20px;
+	border-style: none;
+	border-color: red;
+	padding-left: 20px;
+	/*overflow-x: hidden;*/
+	white-space: nowrap; 
+}
+ul.LinkedList ul {
+	display: block;	
+	padding-left: 20px;
+} 
+ .HandCursorStyle { cursor: pointer; cursor: hand; }  /* For IE */

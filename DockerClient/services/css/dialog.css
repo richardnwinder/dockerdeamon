@@ -1,0 +1,343 @@
+div.css-modal-dialog{
+width:100%;
+height:100%;
+top:0;
+left:0;
+display:none;
+position:fixed;
+background-color:rgba(31,31,31,0.5);
+overflow:auto;
+z-index:3;
+}
+div.css-modal-form{
+position:absolute;
+left:50%;
+top:150px;
+margin-left:-216px;
+}
+form.css-form{
+padding:10px 50px;
+border:2px solid gray;
+border-radius:10px;
+font-family:arial;
+background-color:#fff;
+}
+h2.css-form{
+background-color:#FEFFED;
+padding:20px 35px;
+margin:-10px -50px;
+text-align:left;
+border-radius:10px 10px 0 0;
+}
+hr.css-form {
+margin-top: 10px;
+margin-bottom: 20px;
+margin-left: -50px;
+margin-right: -50px;
+border:0;
+border-top:1px solid #ccc
+}
+a.css-form-close{
+background: #fa5858;
+color: #ffffff;
+line-height: 25px;
+position: absolute;
+right: 12px;
+text-align: center;
+top: 10px;
+width: 24px;
+text-decoration: none;
+font-weight: bold;
+-webkit-border-radius: 12px;
+-moz-border-radius: 12px;
+border-radius: 12px;
+.box-shadow;
+.transition;
+.transition-delay(.2s);
+}
+a.css-form-close:hover{
+	background: #ff0000;
+	.transition;
+}
+label.css-form{
+display:block;
+clear:both;
+font-size:12px;
+font-family:arial;
+font-weight: bold;
+}
+input.css-form[type=text] {
+padding:3px;
+margin-top:5px;
+margin-bottom:20px;
+border:1px solid #ccc;
+padding-left:10px;
+font-size:12px;
+font-family:arial;
+}
+select.css-form {
+padding:3px;
+margin-top:5px;
+margin-bottom:20px;
+border:1px solid #ccc;
+padding-left:5px;
+font-size:12px;
+font-family:arial;
+}
+input.css-form[type=checkbox]{
+padding:5px;
+margin-top:5px;
+margin-bottom:20px;
+padding-left:10px;
+}
+input.css-form[type=radio]{
+vertical-align:middle;
+padding:5px;
+margin-top:5px;
+margin-bottom:5px;
+padding-left:10px;
+font-size:12px;
+font-family:arial;
+}
+p.css-form{
+font-size:12px;
+font-family:arial;
+}
+img.css-form-wait{
+float: right;
+width:80px;
+padding:10px;
+margin-top:0px;
+margin-bottom:0px;
+margin-left:10px;
+margin-right:10px;
+}
+a.css-form-button{
+float: right;
+width:80px;
+text-decoration:none;
+text-align:center;
+background-color:#FFBC00;
+color:#fff;
+border:1px solid #FFCB00;
+padding:10px;
+margin-top:0px;
+margin-bottom:10px;
+margin-left:10px;
+margin-right:10px;
+font-size:14px;
+cursor:pointer;
+border-radius:5px;
+}
+hr.css-form-block{
+margin:20px 0px;
+border:0;
+border-top:1px solid #ccc;
+}
+/*img.css-form{
+	float: left;
+	margin-left: 10px;
+}*/
+/*textarea.css-post-title{*/
+/*background-image:url(../icons/kevin.png);
+background-repeat:no-repeat;
+background-position:5px 7px;*/
+/*width:82%;*/
+/*height:30px;*/
+/*padding:5px;
+resize:none;
+margin-top:0px;
+border:1px solid #ccc;
+padding-left:10px;
+font-size:13px;
+font-family:arial;
+font-weight:bold;
+margin-bottom:0px
+}*/
+/*textarea.css-post-content{*/
+/*background-image:url(../icons/kevin.png);
+background-repeat:no-repeat;
+background-position:5px 7px;*/
+/*width:82%;*/
+/*height:30px;*/
+/*padding:5px;
+resize:none;
+margin-top:0px;
+border:1px solid #ccc;
+padding-left:10px;
+font-size:11px;
+font-family:arial;
+font-weight:bold;
+margin-bottom:0px;
+}*/
+div.css-dialog-post{
+display:none;
+position:absolute;
+overflow:auto;
+top:220px;
+left:270px;
+width:460px;
+margin-left:-7px;
+margin-right:0px;
+padding-top:10px;
+padding-right:10px;
+/*border:2px solid grey;
+border-radius:10px;<link href="./css/dialog.css" rel="stylesheet" type="text/css">
+background-color:#fff;*/
+}
+div.css-form-image-container{
+	width:340px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:auto;
+	margin-left:auto;
+	text-align:center;
+}
+div.css-form-image-container div
+{
+	display:inline-block;
+}
+form.css-form-post{
+padding:5px 5px;
+font-family:arial;
+border:2px solid gray;
+border-radius:10px;
+background-color:#fff;
+}
+textarea.css-form-post-title{
+	color:black;
+	font-family:arial;
+	font-weight:bold;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:5px;
+	margin-left:8px;
+	padding-left:10px;
+	width:340px;
+}
+textarea.css-form-post-content{
+	color:black;
+	font-family:arial;
+	font-size:11px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	margin-left:45px;
+	padding-left:10px;
+	width:340px;
+}
+img.css-form-post{
+	float:left;
+	margin:0px;
+	margin-bottom:10px;
+}
+a.css-form-post-close{
+position:absolute;
+background: #fa5858;
+color: #ffffff;
+line-height: 25px;
+right: 0px;
+text-align: center;
+top: 0px;
+width: 24px;
+text-decoration: none;
+font-weight: bold;
+-webkit-border-radius: 12px;
+-moz-border-radius: 12px;
+border-radius: 12px;
+.box-shadow;
+.transition;
+.transition-delay(.2s);
+}
+a.css-form-post-close:hover{
+	background: #ff0000;
+	.transition;
+}
+div.css-form-edit{
+	display:none;
+	border:1px solid #ccc;
+}
+a.css-form-edit{
+	float:right;
+	width:110px;
+	color:purple;
+	font-size:11px;
+	font-family:arial;
+	font-weight:bold;
+}
+a.css-form-edit-cancel{
+	float: right;
+	display: none;
+	background: #fa5858;
+	color: #ffffff;
+	text-decoration: none;
+	text-align: center;
+	width: 16px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	margin-left:4px;
+	margin-right:2px;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: bold;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+a.css-form-edit-ok{
+	float: right;
+	display: none;
+	background: #008000;
+	color: #ffffff;
+	text-decoration: none;
+	text-align: center;
+	width: 24px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	margin-left:2px;
+	margin-right:50px;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: bold;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+input.css-form-edit[type=text] {
+	display: none;
+	width: 220px;
+	border:1px solid #ccc;
+	margin-left:-11px;
+	margin-top:-5px;
+	padding-left:10px;
+	font-size:11px;
+	font-family:arial;
+	font-weight:bold;
+}
+input.css-form-edit[type=file] {
+	font-size:11px;
+	font-family:arial;
+}
+textarea.css-form-edit {
+	display: none;
+	border:1px solid #ccc;
+	margin-left:-11px;
+	margin-top:-3px;
+	padding-left:10px;
+	font-size:11px;
+	font-family:arial;
+	font-weight:bold;
+}
+p.css-form-edit{
+	color:black;
+	font-family:arial;
+	font-size:11px;
+	margin-top:0px;
+	margin-bottom:5px;
+	margin-right:0px;
+	margin-left:10px;
+}

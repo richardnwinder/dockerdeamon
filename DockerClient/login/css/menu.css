@@ -1,0 +1,119 @@
+.transition(@time: .5s, @range: all, @ease: ease-out)
+{
+	-moz-transition: @range @time @ease;
+	-webkit-transition: @range @time @ease;
+	-o-transition: @range @time @ease;
+	-transition: @range @time @ease;
+}
+.transition-delay(@time: .4s)
+{
+	-moz-transition-delay: @time;
+	-webkit-transition-delay: @time;
+	-o-transition-delay: @time;
+	-transition-delay: @time;
+}
+label.aside{
+	width: 90px;
+	color: #0000ff;		/* light blue */
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	margin-left:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	text-align: center;
+}
+label.aside:hover{
+	color: #7401df;		/* purple */
+	.transition;
+	.transition-delay(.2s);
+}
+label.aside-selected{
+	width: 90px;
+	color: #0000ff;		/* blue */
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	margin-left:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	text-align: center;
+}
+label.login{
+	color: #0000ff;		/* blue */
+	font-family:arial;
+	font-size:14px;
+	font-weight:bold;
+	margin-left:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	float:center;
+}
+label.login:hover{
+	color: #7401df;		/* purple */
+	.transition;
+	.transition-delay(.2s);
+}
+label.index{
+	color: #0000ff;		/* blue */
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	margin-left:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	float:center;
+}
+label.index:hover{
+	color: #7401df;		/* purple */
+	.transition;
+	.transition-delay(.2s);
+}
+label.menu-enabled{
+	width: 90px;
+	color: #8080ff;		/* light blue */
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	margin-left:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	float:left;
+	text-align: center;
+}
+label.menu-enabled:hover{
+	color: #7401df;		/* purple */
+	.transition;
+	.transition-delay(.2s);
+}
+label.menu-disabled{
+	width: 90px;
+	color: grey;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	margin-left:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	float:left;
+	text-align: center;
+}
+label.menu-selected{
+	width: 90px;
+	color: #0000ff;		/* blue */
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	margin-left:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-right:0px;
+	float:left;
+	text-align: center;
+}
