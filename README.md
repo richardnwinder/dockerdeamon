@@ -6,13 +6,13 @@ clone the git directory to your local machine
 
 In order to edit and compile the source some dependancies are required
 #####go socket-io
->user@machine:~go get github.com/googollee/socket-io
+>user@machine:~**go get github.com/googollee/socket-io**
 
 #####Compile the go executable:
->user@machine:~go make dockerdeamon
+>user@machine:~**go make dockerdeamon**
 
 #####Install:
->user@machine:~go install dockerdeamon
+>user@machine:~**go install dockerdeamon**
 
 Copy the directory DockerClient from the src directory to the same directory as your dockerdeamon executable
 
