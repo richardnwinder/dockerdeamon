@@ -14,7 +14,7 @@ In order to edit and compile the source some dependancies are required
 #####Install:
 >user@machine:~**go install dockerdeamon**
 
-Copy the directory DockerClient from the src directory to the same directory as your dockerdeamon executable
+Copy the directory DockerClient from the src directory to the same directory as your dockerdeamon executable or to a destination of your choosing.
 
 #####It is necessary to hard code the location of the web pages directory [DockerClient] in the main.go source code line 36.
 
