@@ -23,4 +23,4 @@ Copy the directory DockerClient from the src directory to the same directory as 
 
 >const webPath string = "/home/user/DockerClient"
 
-alter the path string to point to the location of your webpages.
+and alter the webPath string to point to the location of your DockerClient web pages.
