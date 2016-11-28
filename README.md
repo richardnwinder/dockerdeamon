@@ -3,9 +3,13 @@ Docker Machine Client serving web page GUI front end.
 
 An Https server for the docker deamon enabling local or remote secure login.
 
-####Installation.
+###Installation.
 
-Clone the git directory to your local machine
+Create a new directory
+>user@machine:~**mkdir $GOPATH/src/github.com/user/dockerdeamon**
+
+Pull the master repo from the github repository
+>user@machine:~**git pull https://github.com/richardnwinder/dockerdeamon master**
 
 In order to edit and compile the source some dependancies are required
 #####go socket-io
@@ -21,11 +25,11 @@ Copy the directory DockerClient from the src directory to the same directory as 
 
 #####It is necessary to hard code the location of the web pages directory [DockerClient] in the main.go source code line 36.
 
->const webPath string = "/home/user/DockerClient"
+>**onst webPath string = "/home/user/DockerClient"**
 
 and alter the webPath string to point to the location of your DockerClient web pages.
 
-####Running
+###Running
 
 Normal execution command
 >user@machine:~**$GOPATH/bin/dockerdeamon -admin=[admin-name] -password=[pwd]**
