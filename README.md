@@ -18,28 +18,21 @@ In order to edit and compile the source some dependancies are required
 #####Compile the go executable:
 >user@machine:~**go make dockerdeamon**
 
-#####Install:
+####Install:
 >user@machine:~**go install dockerdeamon**
 
 Copy the directory DockerClient from the src directory to the same directory as your dockerdeamon executable or to a destination of your choosing.
 
-#####It is necessary to hard code the location of the web pages directory [DockerClient] in the main.go source code line 36.
+######It is necessary to hard code the location of the web pages directory [DockerClient] in the main.go source code line 36.
 
 >**const webPath string = "/home/user/DockerClient"**
 
 and alter the webPath string to point to the location of your DockerClient web pages.
 
-####Generate private key (.key)
-
-##### Key considerations for algorithm "RSA" ≥ 2048-bit
->user@machine:~**openssl genrsa -out server.key 2048**
-
-##### Key considerations for algorithm "ECDSA" ≥ secp384r1
-###### List ECDSA the supported curves (openssl ecparam -list_curves)
->user@machine:~**openssl ecparam -genkey -name secp384r1 -out server.key**
-
 Generation of self-signed(x509) public key (PEM-encodings .pem|.crt) based on the private (.key)
->user@machine:~**openssl req -new -x509 -sha256 -key server.key -out server.pem -days 3650**
+>user@machine:~**openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem**
+
+Copy the files key.pem and cert.pem to your $GOPATH/bin directory or the directory where your dockerdeamon executable is, from the directory where you created the certs.
 
 ###Running
 
