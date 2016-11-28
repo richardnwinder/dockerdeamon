@@ -29,6 +29,18 @@ Copy the directory DockerClient from the src directory to the same directory as 
 
 and alter the webPath string to point to the location of your DockerClient web pages.
 
+Generate private key (.key)
+
+# Key considerations for algorithm "RSA" ≥ 2048-bit
+>user@machine:~**openssl genrsa -out server.key 2048**
+
+# Key considerations for algorithm "ECDSA" ≥ secp384r1
+# List ECDSA the supported curves (openssl ecparam -list_curves)
+>user@machine:~**openssl ecparam -genkey -name secp384r1 -out server.key**
+
+Generation of self-signed(x509) public key (PEM-encodings .pem|.crt) based on the private (.key)
+>user@machine:~**openssl req -new -x509 -sha256 -key server.key -out server.pem -days 3650**
+
 ###Running
 
 Normal execution command
