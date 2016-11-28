@@ -19,4 +19,5 @@ Copy the directory DockerClient from the src directory to the same directory as 
 #####It is necessary to hard code the location of the web pages directory [DockerClient] in the main.go source code line 36.
 
 >const webPath string = "/home/user/DockerClient"
+
 alter the path string to point to the location of your webpages.
