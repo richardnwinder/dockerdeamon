@@ -6,10 +6,18 @@ An Https server for the docker deamon enabling local or remote secure login.
 ###Installation.
 
 Create a new directory
->user@machine:~/$**mkdir $GOPATH/src/github.com/user/dockerdeamon**
+>user@machine:~/$**mkdir $GOPATH/src/github.com/richardnwinder/dockerdeamon**
 
-Pull the master repo from the github repository
+Change to the new directory and pull the master repo from the github repository
 >user@machine:~/$**git pull https://github.com/richardnwinder/dockerdeamon master**
+
+Copy the directory DockerClient from the src directory dockerdeamon to a destination of your choosing = usually something like /home/$USER/www
+
+######It is necessary to hard code the location of the web pages directory [DockerClient] in the main.go source code line 36.
+
+>**const webPath string = "/home/user/www/DockerClient"**
+
+and alter the webPath string to point to the location of your DockerClient web pages.
 
 In order to edit and compile the source some dependancies are required
 #####goerror
@@ -22,14 +30,6 @@ In order to edit and compile the source some dependancies are required
 
 ####Install:
 >user@machine:~/$**go install dockerdeamon**
-
-Copy the directory DockerClient from the src directory to the same directory as your dockerdeamon executable or to a destination of your choosing.
-
-######It is necessary to hard code the location of the web pages directory [DockerClient] in the main.go source code line 36.
-
->**const webPath string = "/home/user/DockerClient"**
-
-and alter the webPath string to point to the location of your DockerClient web pages.
 
 Generation of self-signed(x509) public key (PEM-encodings .pem|.crt) based on the private (.key)
 >user@machine:~/$**openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem**
