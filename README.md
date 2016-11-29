@@ -33,7 +33,7 @@ In order to edit and compile the source some dependancies are required
 >user@machine:~/$ **go install dockerdeamon**
 
 Generation of self-signed(x509) public key (PEM-encodings .pem|.crt) based on the private (.key)
->user@machine:~/$ **sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem**
+>user@machine:~/$ **sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $GOPATH/ca/key.pem -out  $GOPATH/ca/cert.pem**
 
 Copy the files key.pem and cert.pem to your $GOPATH/bin directory or the directory where your dockerdeamon executable is, from the directory where you created the certs.
 
