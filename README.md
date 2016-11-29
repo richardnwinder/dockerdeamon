@@ -22,25 +22,25 @@ and alter the webPath string to point to the location of your DockerClient web p
 
 In order to edit and compile the source some dependancies are required
 #####goerror
->user@machine:~/$**go get github.com/richardnwinder/goerror**
+>user@machine:~/$ **go get github.com/richardnwinder/goerror**
 #####go socket-io
->user@machine:~/$**go get github.com/googollee/socket-io**
+>user@machine:~/$ **go get github.com/googollee/go-socket.io**
 
 #####Compile the go executable:
->user@machine:~/$**go make dockerdeamon**
+>user@machine:~/$ **go make dockerdeamon**
 
 ####Install:
->user@machine:~/$**go install dockerdeamon**
+>user@machine:~/$ **go install dockerdeamon**
 
 Generation of self-signed(x509) public key (PEM-encodings .pem|.crt) based on the private (.key)
->user@machine:~/$**openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem**
+>user@machine:~/$ **openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem**
 
 Copy the files key.pem and cert.pem to your $GOPATH/bin directory or the directory where your dockerdeamon executable is, from the directory where you created the certs.
 
 ###Running
 
 Normal execution command
->user@machine:~/$**$GOPATH/bin/dockerdeamon -admin=[admin-name] -password=[pwd]**
+>user@machine:~/$ **$GOPATH/bin/dockerdeamon -admin=[admin-name] -password=[pwd]**
 
 replace [admin-name] with char string eg - richard - any length of string is accepted but whitespace is not
 replace [pwd] with any char string eg - win36qly - any length of string is accepted but whitespace is not.
