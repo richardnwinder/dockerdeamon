@@ -42,4 +42,7 @@ Normal execution command
 >user@machine:~/$**$GOPATH/bin/dockerdeamon -admin=[admin-name] -password=[pwd]**
 
 replace [admin-name] with char string eg - richard - any length of string is accepted but whitespace is not
-replace [pwd] with any char string eg - win36qly - any length of string is accepted but whitespace is not
+replace [pwd] with any char string eg - win36qly - any length of string is accepted but whitespace is not.
+
+###Browser
+Goto https://localhost:8081/ and login with the admin-name and password.
