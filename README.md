@@ -6,10 +6,11 @@ An Https server for the docker deamon enabling local or remote secure login.
 ###Installation.
 
 Create a new directory
->user@machine:~/$**mkdir $GOPATH/src/github.com/richardnwinder/dockerdeamon**
+>user@machine:~/$ **mkdir -p $GOPATH/src/github.com/richardnwinder/dockerdeamon**
 
-Change to the new directory and pull the master repo from the github repository
->user@machine:~/$**git pull https://github.com/richardnwinder/dockerdeamon master**
+Change to the new directory cteate a ne git repository and pull the master repo from the github repository
+>user@machine:~/$ **git init**
+>user@machine:~/$ **git pull https://github.com/richardnwinder/dockerdeamon master**
 
 Copy the directory DockerClient from the src directory dockerdeamon to a destination of your choosing = usually something like /home/$USER/www
 
